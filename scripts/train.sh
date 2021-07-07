@@ -1,4 +1,4 @@
-DATASET_DIR=train_data/train2017
+DATASET_DIR=train_data/train_tiny
 
 # Stage 1: Training Full Image Colorization
 mkdir ./checkpoints/coco_full
