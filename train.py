@@ -105,6 +105,7 @@ if __name__ == '__main__':
                     losses = model.get_current_losses()
                     if opt.display_id > 0:
                         visualizer.plot_current_losses(epoch, float(epoch_iter) / dataset_size, opt, losses)
+                        visualizer.print_current_losses(epoch, 0, losses, 0, 0)
             if epoch % opt.save_epoch_freq == 0:
                 model.save_fusion_epoch(epoch)
             model.update_learning_rate()
