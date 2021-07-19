@@ -103,6 +103,7 @@ if __name__ == '__main__':
 
                 if total_steps % opt.print_freq == 0:
                     losses = model.get_current_losses()
+                    print(losses)
                     visualizer.print_current_losses(epoch, 0, losses, 0, 0)
                     if opt.display_id > 0:
                         visualizer.plot_current_losses(epoch, float(epoch_iter) / dataset_size, opt, losses)
