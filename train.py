@@ -7,7 +7,7 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 from tqdm import trange, tqdm
-
+import pandas as pd
 from fusion_dataset import *
 from util import util
 import os
@@ -74,8 +74,9 @@ if __name__ == '__main__':
                 model.save_networks(epoch)
             model.update_learning_rate()
     elif opt.stage == 'fusion':
-        g = []
-        l1 = []
+        # g = []
+        # l1 = []
+        losses_list = []
         for epoch in trange(opt.epoch_count, opt.niter + opt.niter_decay, desc='epoch', dynamic_ncols=True):
             epoch_iter = 0
 
@@ -111,11 +112,9 @@ if __name__ == '__main__':
                 model.save_fusion_epoch(epoch)
             model.update_learning_rate()
             losses = model.get_current_losses()
-            g.append(losses['G'])
-            l1.append(losses['L1'])
-            print(g)
-            print(l1)
-
+            losses_list.append([losses['G'], losses['L1']])
+        df = pd.DataFrame(losses_list, columns=['G', 'L1'])
+        df.to_csv("./losses.csv")
     else:
         print('Error! Wrong stage selection!')
         exit()
