@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 def plot_losses(g_list, l1_list, batch_size, learning_rate):
 	epochs = range(1, len(g_list)+1)
 	# plotting the line 1 points
-	plt.plot(g_list, epochs, label="G Loss")
+	plt.plot(epochs, g_list, label="G Loss")
 	# plotting the line 2 points
-	plt.plot(l1_list, epochs, label="L1 Loss")
+	plt.plot(epochs, l1_list, label="L1 Loss")
 	plt.xlabel('Epochs')
 	# Set the y axis label of the current axis.
 	plt.ylabel('Losses')
