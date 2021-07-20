@@ -2,14 +2,13 @@ import time
 from options.train_options import TrainOptions
 from models import create_model
 from util.visualizer import Visualizer
-
 import torch
 import torchvision
 import torchvision.transforms as transforms
 from tqdm import trange, tqdm
 import pandas as pd
 from fusion_dataset import *
-from util import util
+from util import util, plots
 import os
 
 if __name__ == '__main__':
@@ -74,9 +73,10 @@ if __name__ == '__main__':
                 model.save_networks(epoch)
             model.update_learning_rate()
     elif opt.stage == 'fusion':
-        # g = []
-        # l1 = []
+        g_list = []
+        l1_list = []
         losses_list = []
+
         for epoch in trange(opt.epoch_count, opt.niter + opt.niter_decay, desc='epoch', dynamic_ncols=True):
             epoch_iter = 0
 
@@ -112,9 +112,10 @@ if __name__ == '__main__':
                 model.save_fusion_epoch(epoch)
             model.update_learning_rate()
             losses = model.get_current_losses()
-            losses_list.append([losses['G'], losses['L1']])
-        df = pd.DataFrame(losses_list, columns=['G', 'L1'])
-        df.to_csv("./losses.csv")
+            g_list.append(losses['G'])
+            l1_list.append(losses['L1'])
+        plots.plot_losses(g_list, l1_list, opt.batch_size, opt.lea)
+
     else:
         print('Error! Wrong stage selection!')
         exit()

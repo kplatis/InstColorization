@@ -45,7 +45,6 @@ class FusionModel(BaseModel):
                                       use_tanh=True, classification=opt.classification)
         self.netGComp.eval()
 
-
     def set_input(self, input):
         AtoB = self.opt.which_direction == 'AtoB'
         self.real_A = input['A' if AtoB else 'B'].to(self.device)
