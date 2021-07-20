@@ -114,7 +114,7 @@ if __name__ == '__main__':
             losses = model.get_current_losses()
             g_list.append(losses['G'])
             l1_list.append(losses['L1'])
-        plots.plot_losses(g_list, l1_list, opt.batch_size, opt.lea)
+        plots.plot_losses(g_list, l1_list, opt.batch_size, opt.lr)
 
     else:
         print('Error! Wrong stage selection!')
