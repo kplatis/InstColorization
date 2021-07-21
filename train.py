@@ -114,6 +114,8 @@ if __name__ == '__main__':
             losses = model.get_current_losses()
             g_list.append(losses['G'])
             l1_list.append(losses['L1'])
+        df = pd.DataFrame([l1_list], columns=['L1'])
+        df.to_csv(f"../training_losses_lr_{str(opt.lr)}")
         plots.plot_losses(g_list, l1_list, opt.batch_size, opt.lr)
 
     else:
