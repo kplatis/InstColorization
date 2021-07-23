@@ -91,7 +91,15 @@ class FusionModel(BaseModel):
                                                    self.full_real_B.type(torch.cuda.FloatTensor)))
         self.loss_G = 10 * torch.mean(self.criterionL1(self.fake_B_reg.type(torch.cuda.FloatTensor),
                                                        self.full_real_B.type(torch.cuda.FloatTensor)))
-        
+
+    def get_current_losses(self):
+        errors_ret = OrderedDict()
+        for name in self.loss_names:
+            if isinstance(name, str):
+                # float(...) works for both scalar tensor and float number
+                errors_ret[name] = float(getattr(self, 'loss_' + name))
+        return errors_ret
+
     def save_current_imgs(self, path):
         out_img = torch.clamp(util.lab2rgb(torch.cat((self.full_real_A.type(torch.cuda.FloatTensor), self.fake_B_reg.type(torch.cuda.FloatTensor)), dim=1), self.opt), 0.0, 1.0)
         out_img = np.transpose(out_img.cpu().data.numpy()[0], (1, 2, 0))
