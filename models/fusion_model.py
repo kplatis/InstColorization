@@ -26,6 +26,8 @@ class FusionModel(BaseModel):
     def initialize(self, opt):
         BaseModel.initialize(self, opt)
         self.model_names = ['G', 'GF']
+        self.loss_names = ['G', 'L1']
+
 
         # load/define networks
         num_in = opt.input_nc + opt.output_nc + 1
