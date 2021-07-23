@@ -66,5 +66,5 @@ if __name__ == '__main__':
         g_list.append(losses['G'])
         l1_list.append(losses['L1'])
     df = pd.DataFrame([l1_list], columns=['L1'])
-    df.to_csv(f"../training_losses_lr_{str(opt.lr)}")
+    df.to_csv(f"../validation_losses_lr_{str(opt.lr)}")
 
