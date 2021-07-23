@@ -63,6 +63,7 @@ if __name__ == '__main__':
                 model.set_forward_without_box(full_img_data)
             model.save_current_imgs(join(save_img_path, data_raw['file_id'][0] + '.png'))
         losses = model.get_current_losses()
+        print(losses)
         g_list.append(losses['G'])
         l1_list.append(losses['L1'])
     df = pd.DataFrame([l1_list], columns=['L1'])
