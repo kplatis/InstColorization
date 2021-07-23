@@ -91,6 +91,7 @@ class FusionModel(BaseModel):
                                                    self.full_real_B.type(torch.cuda.FloatTensor)))
         self.loss_G = 10 * torch.mean(self.criterionL1(self.fake_B_reg.type(torch.cuda.FloatTensor),
                                                        self.full_real_B.type(torch.cuda.FloatTensor)))
+        print(f"loss l1:{str(self.loss_L1)}")
 
     def get_current_losses(self):
         errors_ret = OrderedDict()
