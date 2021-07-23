@@ -1,20 +1,13 @@
-import os
 from os.path import join
-import time
-from options.train_options import TrainOptions, TestOptions
+from options.train_options import TestOptions
 from models import create_model
-from util.visualizer import Visualizer
 import pandas as pd
 import torch
-import torchvision
-import torchvision.transforms as transforms
 from tqdm import trange, tqdm
-
 from fusion_dataset import Fusion_Testing_Dataset
 from util import util
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-import numpy as np
 import multiprocessing
 multiprocessing.set_start_method('spawn', True)
 
@@ -34,7 +27,6 @@ if __name__ == '__main__':
     print('#Testing images = %d' % dataset_size)
 
     model = create_model(opt)
-    # model.setup_to_test('coco_finetuned_mask_256')
     model.setup_to_test('coco_finetuned_mask_256_ffs')
 
     count_empty = 0
