@@ -44,6 +44,7 @@ class FusionModel(BaseModel):
                                       'siggraph', opt.norm, not opt.no_dropout, opt.init_type, self.gpu_ids,
                                       use_tanh=True, classification=opt.classification)
         self.netGComp.eval()
+        self.criterionL1 = networks.HuberLoss(delta=1. / opt.ab_norm)
 
     def set_input(self, input):
         AtoB = self.opt.which_direction == 'AtoB'
@@ -84,6 +85,12 @@ class FusionModel(BaseModel):
     def forward(self):
         (_, feature_map) = self.netG(self.real_A, self.hint_B, self.mask_B)
         self.fake_B_reg = self.netGF(self.full_real_A, self.full_hint_B, self.full_mask_B, feature_map, self.box_info_list)
+
+    def calculate_losses(self):
+        self.loss_L1 = torch.mean(self.criterionL1(self.fake_B_reg.type(torch.cuda.FloatTensor),
+                                                   self.full_real_B.type(torch.cuda.FloatTensor)))
+        self.loss_G = 10 * torch.mean(self.criterionL1(self.fake_B_reg.type(torch.cuda.FloatTensor),
+                                                       self.full_real_B.type(torch.cuda.FloatTensor)))
         
     def save_current_imgs(self, path):
         out_img = torch.clamp(util.lab2rgb(torch.cat((self.full_real_A.type(torch.cuda.FloatTensor), self.fake_B_reg.type(torch.cuda.FloatTensor)), dim=1), self.opt), 0.0, 1.0)

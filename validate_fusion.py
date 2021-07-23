@@ -62,6 +62,7 @@ if __name__ == '__main__':
                 full_img_data = util.get_colorization_data(data_raw['full_img'], opt, ab_thresh=0, p=opt.sample_p)
                 model.set_forward_without_box(full_img_data)
             model.save_current_imgs(join(save_img_path, data_raw['file_id'][0] + '.png'))
+        model.calculate_losses()
         losses = model.get_current_losses()
         print(losses)
         g_list.append(losses['G'])
