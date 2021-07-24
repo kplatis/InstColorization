@@ -15,7 +15,7 @@ def plot_losses(train_list, validation_list, learning_rate, epochs):
 	# show a legend on the plot
 	plt.legend()
 	# Display a figure.
-	plot_file = f"./plot_results/losses_lr_{str(learning_rate)}_epochs_{str(epochs)}.csv"
+	plot_file = f"./plot_results/losses_lr_{str(learning_rate)}_epochs_{str(epochs)}.png"
 	plt.savefig(plot_file, format='png')
 	print(f"Saved plot in {plot_file}")
 	plt.close()
