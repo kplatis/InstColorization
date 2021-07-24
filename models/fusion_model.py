@@ -26,8 +26,6 @@ class FusionModel(BaseModel):
     def initialize(self, opt):
         BaseModel.initialize(self, opt)
         self.model_names = ['G', 'GF']
-        self.loss_names = ['G', 'L1']
-
 
         # load/define networks
         num_in = opt.input_nc + opt.output_nc + 1
@@ -87,21 +85,6 @@ class FusionModel(BaseModel):
     def forward(self):
         (_, feature_map) = self.netG(self.real_A, self.hint_B, self.mask_B)
         self.fake_B_reg = self.netGF(self.full_real_A, self.full_hint_B, self.full_mask_B, feature_map, self.box_info_list)
-
-    def calculate_losses(self):
-        self.loss_L1 = torch.mean(self.criterionL1(self.fake_B_reg.type(torch.cuda.FloatTensor),
-                                                   self.full_real_B.type(torch.cuda.FloatTensor)))
-        self.loss_G = 10 * torch.mean(self.criterionL1(self.fake_B_reg.type(torch.cuda.FloatTensor),
-                                                       self.full_real_B.type(torch.cuda.FloatTensor)))
-        print(f"loss l1:{str(self.loss_L1)}")
-
-    def get_current_losses(self):
-        errors_ret = OrderedDict()
-        for name in self.loss_names:
-            if isinstance(name, str):
-                # float(...) works for both scalar tensor and float number
-                errors_ret[name] = float(getattr(self, 'loss_' + name))
-        return errors_ret
 
     def save_current_imgs(self, path):
         out_img = torch.clamp(util.lab2rgb(torch.cat((self.full_real_A.type(torch.cuda.FloatTensor), self.fake_B_reg.type(torch.cuda.FloatTensor)), dim=1), self.opt), 0.0, 1.0)

@@ -97,12 +97,7 @@ class BaseModel():
         errors_ret = OrderedDict()
         for name in self.loss_names:
             if isinstance(name, str):
-                # float(...) works for both scalar tensor and float number
                 errors_ret[name] = float(getattr(self, 'loss_' + name))
-                # self.avg_losses[name] = float(getattr(self, 'loss_' + name)) + self.avg_loss_alpha * self.avg_losses[
-                #     name]
-                # errors_ret[name] = (1 - self.avg_loss_alpha) / (1 - self.avg_loss_alpha ** self.error_cnt) * \
-                #                    self.avg_losses[name]
         return errors_ret
 
     # save models to the disk
