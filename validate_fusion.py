@@ -1,7 +1,5 @@
-from os.path import join
 from options.train_options import TestOptions
 from models import create_model
-import pandas as pd
 import torch
 from tqdm import trange, tqdm
 from fusion_dataset import Fusion_Testing_Dataset
@@ -9,8 +7,9 @@ from util import util
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import multiprocessing
-multiprocessing.set_start_method('spawn', True)
+import pandas as pd
 
+multiprocessing.set_start_method('spawn', True)
 torch.backends.cudnn.benchmark = True
 
 if __name__ == '__main__':
@@ -27,15 +26,15 @@ if __name__ == '__main__':
     print('#Testing images = %d' % dataset_size)
 
     model = create_model(opt)
-    model.setup_to_test('coco_finetuned_mask_256_ffs')
-
-    count_empty = 0
+    model.setup_to_test('coco_finetuned_mask_256')
 
     g_list = []
     l1_list = []
     losses_list = []
 
     for epoch in trange(0, opt.niter + opt.niter_decay, desc='epoch', dynamic_ncols=True):
+
+        count_empty = 0
         for data_raw in tqdm(dataset_loader, dynamic_ncols=True):
             data_raw['full_img'][0] = data_raw['full_img'][0].cuda()
             if data_raw['empty_box'][0] == 0:
@@ -53,12 +52,9 @@ if __name__ == '__main__':
                 count_empty += 1
                 full_img_data = util.get_colorization_data(data_raw['full_img'], opt, ab_thresh=0, p=opt.sample_p)
                 model.set_forward_without_box(full_img_data)
-            model.save_current_imgs(join(save_img_path, data_raw['file_id'][0] + '.png'))
-        model.calculate_losses()
         losses = model.get_current_losses()
-        print(losses)
         g_list.append(losses['G'])
         l1_list.append(losses['L1'])
-    df = pd.DataFrame([l1_list], columns=['L1'])
+    df = pd.DataFrame(l1_list, columns=['L1'])
     df.to_csv(f"../validation_losses_lr_{str(opt.lr)}.csv")
 
