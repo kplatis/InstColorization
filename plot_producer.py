@@ -10,4 +10,4 @@ if __name__ == '__main__':
 	train_data = pd.read_csv(train_file)['L1'].tolist()
 	val_data = pd.read_csv(val_file)['L1'].tolist()
 
-	plot_losses(train_data, val_data, lr)
+	plot_losses(train_data, val_data, lr, epochs)
