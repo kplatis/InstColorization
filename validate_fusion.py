@@ -1,5 +1,4 @@
 import glob
-
 from options.train_options import TestOptions
 from models import create_model
 import torch
