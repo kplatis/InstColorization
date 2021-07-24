@@ -1,19 +1,20 @@
 import matplotlib.pyplot as plt
 
 
-def plot_losses(g_list, l1_list, batch_size, learning_rate):
-	epochs = range(1, len(g_list)+1)
+def plot_losses(train_list, validation_list, learning_rate):
+	epochs = range(1, len(train_list) + 1)
 	# plotting the line 1 points
-	plt.plot(epochs, g_list, label="G Loss")
+	plt.plot(epochs, train_list, label="Train")
 	# plotting the line 2 points
-	plt.plot(epochs, l1_list, label="L1 Loss")
+	plt.plot(epochs, validation_list, label="Validation")
 	plt.xlabel('Epochs')
 	# Set the y axis label of the current axis.
 	plt.ylabel('Losses')
 	# Set a title of the current axes.
-	plt.title(f'Plots of losses per epoch [LR={str(learning_rate)} | Batch size={str(batch_size)}]')
+	plt.title(f'Plots of losses per epoch [LR={str(learning_rate)}]')
 	# show a legend on the plot
 	plt.legend()
 	# Display a figure.
-	plt.savefig(f"../losses_lr_{str(learning_rate)}")
+
+	plt.savefig(f"./plot_results/losses_lr_{str(learning_rate)}.png", format='png')
 	plt.close()
